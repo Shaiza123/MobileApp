@@ -37,7 +37,7 @@ const RootNavigator = () => {
             <View style={{ height: hp(7.5), width: hp(7.5), borderRadius: hp(4), backgroundColor: '#fff' }}>{children}</View>
         </TouchableOpacity>
     )
-
+    
     const AppTab = () => (
         <Tab.Navigator
             screenOptions={{
@@ -73,9 +73,7 @@ const RootNavigator = () => {
                     tabBarButton: (props) => (
                         <CustomButton {...props} />
                     ),
-                    tabBarStyle: {
-                        display: 'none'
-                    }
+
                 }}
             />
             <Tab.Screen
@@ -86,9 +84,9 @@ const RootNavigator = () => {
                     tabBarIcon: ({ color }) => (
                         <Icon name="settings" color={color} size={26} />
                     ),
-                    // tabBarStyle:({focused}) => ({
-                    //     display: focused ? 'none' : 'flex'
-                    // })
+                    tabBarStyle: {
+                        display: 'none'
+                    }
                 }}
             />
         </Tab.Navigator>
@@ -123,24 +121,23 @@ const RootNavigator = () => {
     //   }
     return (
         <View style={{ flex: 1 }}>
-        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-        <Stack.Navigator
-            screenOptions={{
-                headerShown: false,
-            }}>
+            <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+            <Stack.Navigator
+                screenOptions={{
+                    headerShown: false,
+                }}>
 
-            {user?.firstLaunch === true ?
-                <Stack.Screen name={'OnBoardingScreen'} component={OnBoardingScreen} /> :
-                <>
-                    {user?.id ?
-                        <Stack.Screen name={'DashBoard'} component={AppStack} />
-                        :
-                        <Stack.Screen name={'Auth'} component={AuthStack} />
-                    }
-                </>
-            }
-
-        </Stack.Navigator>
+                {user?.firstLaunch === true ?
+                    <Stack.Screen name={'OnBoardingScreen'} component={OnBoardingScreen} /> :
+                    <>
+                        {user?.id ?
+                            <Stack.Screen name={'DashBoard'} component={AppStack} />
+                            :
+                            <Stack.Screen name={'Auth'} component={AuthStack} />
+                        }
+                    </>
+                }
+            </Stack.Navigator>
         </View>
     );
 };
