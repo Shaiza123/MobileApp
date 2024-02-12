@@ -14,17 +14,7 @@ LogBox.ignoreLogs([
 const BookMark = (props) => { 
   const user = useSelector((state) => state.user)
   const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
-  const [visible, setVisible] = useState('');
-  const [visibleMenu, setVisibleMenu] = useState(false);
-
-  const openMenu = (id) => {
-    setVisibleMenu(true)
-    setVisible(id);
-  }
-  const closeMenu = () => {
-    setVisibleMenu(false)
-    setVisible('');
-  }
+  
   useEffect(() => {
     getBookmarkedPosts();
   },[bookmarkedPosts]);
@@ -49,10 +39,8 @@ const BookMark = (props) => {
                         numColumns={2}
                         renderItem={({ item }) => (<CardScreen item={item} navigation={props?.navigation} 
                         bookmarkArticle={props?.route?.params?.bookmarkArticle}
-                        visible={visible}
-                        visibleMenu={visibleMenu}
-                        openMenu={openMenu}
-                        closeMenu={closeMenu}
+                        postId={user?.postId}
+                        isOwner={item.id.startsWith(user.postId)}
                         />)}
                         keyExtractor={item => item.id}
                     />

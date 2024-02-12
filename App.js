@@ -1,16 +1,16 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import RootNavigator from "./src/routes/RootNavigator";
-import { PaperProvider } from 'react-native-paper';
+import { MenuProvider } from 'react-native-popup-menu';
 
 const App = () => {
   
   return (
-    <PaperProvider>
+    <MenuProvider>
     <NavigationContainer>
       <RootNavigator />
     </NavigationContainer>
-    </PaperProvider>
+    </MenuProvider>
   )
 }
 

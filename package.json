@@ -33,6 +33,7 @@
     "react-native-image-header-scroll-view": "^1.0.0",
     "react-native-onboarding-swiper": "^1.2.0",
     "react-native-paper": "^5.11.4",
+    "react-native-popup-menu": "^0.16.1",
     "react-native-reanimated": "^3.7.0",
     "react-native-responsive-fontsize": "^0.5.1",
     "react-native-responsive-screen": "^1.4.2",

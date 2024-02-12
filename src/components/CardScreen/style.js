@@ -47,48 +47,17 @@ export default styles = StyleSheet.create({
         borderRadius:hp(5),
         margin:hp(1)
     },
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)',
-    },
-    modalView: {
-        position: 'absolute',
-        top: hp(10),
-        right: hp(1),
-        backgroundColor: '#F9F6F7',
-        borderRadius: hp(1),
-        paddingVertical: hp(4),
-        paddingHorizontal: hp(7),
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-        width: '10%',
-        justifyContent:'center'
-    },
-    deleteButton: {
-        position: 'absolute',
-        flexDirection: 'row',
-    },
-    deleteText: {
-        color: '#FF0000',
-    },
     menuItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: hp(2),
+        padding: hp(2)
     },
-
-    deleteText: {
-        color: '#FF0000',
-        marginLeft: hp(2),
+    menuItemText: {
+        marginLeft: hp(1),
+        fontSize: RFPercentage(2),
+    },
+    menuTriggerStyle: {
+        padding: hp(1)
     },
 
 });

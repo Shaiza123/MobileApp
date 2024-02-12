@@ -73,7 +73,9 @@ const RootNavigator = () => {
                     tabBarButton: (props) => (
                         <CustomButton {...props} />
                     ),
-
+                    tabBarStyle: {
+                        display: 'none'
+                    }
                 }}
             />
             <Tab.Screen
