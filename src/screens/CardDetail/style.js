@@ -43,6 +43,5 @@ export default styles = StyleSheet.create({
     fontSize: RFPercentage(2),
   },
   menuTriggerStyle: {
-    paddingHorizontal: hp(1)
-  },
+    paddingHorizontal: hp(2),  },
 })
