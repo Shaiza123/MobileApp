@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, Modal } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, TouchableOpacity,ActivityIndicator} from 'react-native'
+import React from 'react'
 import styles from '../CardScreen/style';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Card } from 'react-native-paper';
@@ -10,43 +10,47 @@ import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-m
 const CardScreen = (props) => {
     return (
         <Card style={styles.card} mode='contained' onPress={() => props?.navigation.navigate('CardDetail', { item: props?.item })} >
-            <View style={styles.image}>
-                <Card.Cover source={{ uri: props?.item?.image }} style={styles.cardImage} />
-                <View style={styles.iconContainer}>
-                    <TouchableOpacity onPress={() => props?.bookmarkArticle(props?.item?.id, props?.item?.PostTitle, props?.item?.PostDescription, props?.item?.image)}>
-                        {props?.isBookmarked ? <FontAwesome name="bookmark" size={hp(2.3)} color="#fff" style={styles.bookmarkIcon} /> :
-                            <FontAwesome name="bookmark-o" size={hp(2.3)} color="#fff" style={styles.bookmarkIcon} />}
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <View style={styles.cardContainer}>
-                <Text style={styles.cardTitle} numberOfLines={2}>{props?.item?.PostTitle}</Text>
-                <Menu>
-                    <MenuTrigger>
-                        <View style={styles.menuTriggerStyle}>
-                            <Entypo name='dots-three-vertical' size={hp(2)} color='#000' />
+            {props?.loading || (props?.isDeleting && props?.deleteItemId === props?.item?.id) ? <ActivityIndicator color="black" size="large" /> :
+                <>
+                    <View style={styles.image}>
+                        <Card.Cover source={{ uri: props?.item?.image }} style={styles.cardImage} />
+                        <View style={styles.iconContainer}>
+                            <TouchableOpacity onPress={() => props?.bookmarkArticle(props?.item?.id, props?.item?.PostTitle, props?.item?.PostDescription, props?.item?.image)}>
+                                {props?.isBookmarked ? <FontAwesome name="bookmark" size={hp(2.3)} color="#fff" style={styles.bookmarkIcon} /> :
+                                    <FontAwesome name="bookmark-o" size={hp(2.3)} color="#fff" style={styles.bookmarkIcon} />}
+                            </TouchableOpacity>
                         </View>
-                    </MenuTrigger>
-                    <MenuOptions>
-                        {props?.isOwner && (
-                            <MenuOption onSelect={() => props?.deleteCollection(props?.item?.id, props?.item?.PostTitle)}>
-                                <View style={styles.menuItem}>
-                                    <FontAwesome name="trash" size={20} color="#FF0000" />
-                                    <Text style={[styles.menuItemText,{color:'#FF0000'}]}>Delete</Text>
+                    </View>
+                    <View style={styles.cardContainer}>
+                        <Text style={styles.cardTitle} numberOfLines={2}>{props?.item?.PostTitle}</Text>
+                        <Menu>
+                            <MenuTrigger>
+                                <View style={styles.menuTriggerStyle}>
+                                    <Entypo name='dots-three-vertical' size={hp(2)} color='#000' />
                                 </View>
-                            </MenuOption>
-                        )}
-                        {!props?.isOwner && (
-                            <MenuOption onSelect={() => props?.bookmarkArticle(props?.item?.id, props?.item?.PostTitle, props?.item?.PostDescription, props?.item?.image)}>
-                                <View style={styles.menuItem}>
-                                    <FontAwesome name={props?.isBookmarked ? "bookmark" : "bookmark-o"} size={20} color="#0147AB" />
-                                    <Text style={[styles.menuItemText,{color:'#0147AB'}]}>{props?.isBookmarked ? 'UnBookmark' : 'Bookmark'}</Text>
-                                </View>
-                            </MenuOption>
-                        )}
-                    </MenuOptions>
-                </Menu>
-            </View>
+                            </MenuTrigger>
+                            <MenuOptions>
+                                {props?.isOwner && (
+                                    <MenuOption onSelect={() => props?.deleteCollection(props?.item?.id, props?.item?.PostTitle)}>
+                                        <View style={styles.menuItem}>
+                                            <FontAwesome name="trash" size={20} color="#FF0000" />
+                                            <Text style={[styles.menuItemText, { color: '#FF0000' }]}>Delete</Text>
+                                        </View>
+                                    </MenuOption>
+                                )}
+                                {!props?.isOwner && (
+                                    <MenuOption onSelect={() => props?.bookmarkArticle(props?.item?.id, props?.item?.PostTitle, props?.item?.PostDescription, props?.item?.image)}>
+                                        <View style={styles.menuItem}>
+                                            <FontAwesome name={props?.isBookmarked ? "bookmark" : "bookmark-o"} size={20} color="#0147AB" />
+                                            <Text style={[styles.menuItemText, { color: '#0147AB' }]}>{props?.isBookmarked ? 'UnBookmark' : 'Bookmark'}</Text>
+                                        </View>
+                                    </MenuOption>
+                                )}
+                            </MenuOptions>
+                        </Menu>
+                    </View>
+                </>
+            }
         </Card>
     )
 }

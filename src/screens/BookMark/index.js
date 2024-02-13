@@ -39,6 +39,7 @@ const BookMark = (props) => {
                         numColumns={2}
                         renderItem={({ item }) => (<CardScreen item={item} navigation={props?.navigation} 
                         bookmarkArticle={props?.route?.params?.bookmarkArticle}
+                        isBookmarked={bookmarkedPosts.some(bookmark => bookmark.id === item.id)}
                         postId={user?.postId}
                         isOwner={item.id.startsWith(user.postId)}
                         />)}

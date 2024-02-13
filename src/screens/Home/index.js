@@ -18,11 +18,12 @@ const Home = (props) => {
   const [deletingItemId, setDeletingItemId] = useState(null);
   const [firstTimeLogin, setFirstTimelogin] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false)
   const user = useSelector((state) => state.user)
   const userFirestoreData = firestore().collection('users').doc(user?.id);
   const postId = user?.postId;
   const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
-  
+
   useEffect(() => {
     getBookmarkedPosts();
   }, [bookmarkedPosts]);
@@ -95,7 +96,6 @@ const Home = (props) => {
       if (doc.exists) {
         const allData = doc.data();
         setCollections(allData?.posts);
-        setIsDeleting(false);
       } else {
         console.log("no doc");
       }
@@ -126,7 +126,6 @@ const Home = (props) => {
 
 
       setAllUserCollections(allData)
-      setIsDeleting(false);
     } catch (err) {
       console.log("err", err);
     }
@@ -135,36 +134,36 @@ const Home = (props) => {
   // Save Post on Firebase 
   const savePost = async (sessionPostTitle, sessionPostDescription, sessionPostImage) => {
     try {
+      setLoading(true)
       const postsRef = firestore().collection("Posts").doc(`${postId}`);
       const doc = await postsRef.get();
       const sessionFolder = `${postId}/${postId}_${sessionPostTitle}`;
       const sessionName = `${sessionPostTitle}`;
       const timestamp = new Date().getTime();
       const imageName = `${sessionFolder}/${sessionName}_${timestamp}.jpg`;
-      // const imageName = `${sessionFolder}/${sessionFolder}_${sessionName}.jpg`;
       const reference = storage().ref(imageName);
       await reference.putFile(sessionPostImage);
       const url = await storage().ref(imageName).getDownloadURL();
       let newId;
       if (!doc.exists) {
         newId = 0
-        const postData = { id: `${postId}_${newId}`, PostTitle: sessionPostTitle, PostDescription: sessionPostDescription, image: url};
+        const postData = { id: `${postId}_${newId}`, PostTitle: sessionPostTitle, PostDescription: sessionPostDescription, image: url };
         await postsRef.set({ posts: [postData] });
       } else {
         const posts = doc.data().posts || [];
         const maxId = posts.reduce((max, post) => Math.max(max, parseInt(post.id.split('_')[1])), -1);
         newId = maxId + 1;
-        const postData = { id: `${postId}_${newId}`, PostTitle: sessionPostTitle, PostDescription: sessionPostDescription, image: url};
+        const postData = { id: `${postId}_${newId}`, PostTitle: sessionPostTitle, PostDescription: sessionPostDescription, image: url };
         await postsRef.update({ posts: firestore.FieldValue.arrayUnion(postData) });
       }
-
+      setLoading(false)
       Snackbar.show({
         text: `Article is uploaded successfully!`,
         textColor: 'white',
         duration: Snackbar.LENGTH_SHORT,
         backgroundColor: 'green',
       });
-
+     
       getAllData();
     } catch (error) {
       console.error('Error saving images:', error);
@@ -232,21 +231,20 @@ const Home = (props) => {
       if (!collectionName) {
         throw new Error('Invalid productsId or collectionName');
       }
-  
+
       const userStoragePath = `${postId}/`;
       const storagePath = `${userStoragePath}${postId}_${collectionName}`;
-      console.log(storagePath)
-  
+
       const storageRef = storage().ref(storagePath);
-  
+
       const items = await storageRef.listAll();
       const deletePromises = items.items.map((item) => item.delete());
       await Promise.all(deletePromises);
-  
+
       if (onDeleteComplete) {
         onDeleteComplete();
       }
-
+      setIsDeleting(false);
       Snackbar.show({
         text: `${collectionName} is deleted successfully!`,
         textColor: 'white',
@@ -325,7 +323,7 @@ const Home = (props) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) =>
-              (<CardScreen deleteCollection={deleteCollection} isDeleting={isDeleting} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts.some(bookmark => bookmark.id === item.id)} isOwner={item.id.startsWith(user.postId)}/>)
+              (<CardScreen deleteCollection={deleteCollection} deletingItemId={deletingItemId} isDeleting={isDeleting} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts.some(bookmark => bookmark.id === item.id)} isOwner={item.id.startsWith(user.postId)} />)
             }
             keyExtractor={item => item?.id}
           />
@@ -339,7 +337,7 @@ const Home = (props) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) =>
-              (<CardScreen deleteCollection={deleteCollection} isDeleting={isDeleting} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts.some(bookmark => bookmark.id === item.id)} isOwner={item.id.startsWith(user.postId)}/>)
+              (<CardScreen loading={loading} deleteCollection={deleteCollection} isDeleting={isDeleting}  deletingItemId={deletingItemId} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts.some(bookmark => bookmark.id === item.id)} isOwner={item.id.startsWith(user.postId)} />)
             }
             keyExtractor={item => item?.id}
           />
