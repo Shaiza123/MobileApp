@@ -44,7 +44,6 @@ const Profile = ({ navigation }) => {
       });
 
       if (!confirmDelete) {
-        // User canceled the deletion
         return;
       }
       const userDocRef = firestore().collection('users').doc(user.id);

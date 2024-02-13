@@ -39,10 +39,10 @@ export default styles = StyleSheet.create({
     },
     lottie: {
         flex: 1,
-        width: hp(20),
+        width: hp(30),
     },
     okText: {
-        color: '#5dcfb6',
+        color: '#0147AB',
     }
 
 });

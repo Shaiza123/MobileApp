@@ -16,6 +16,7 @@ const Home = (props) => {
   const [collections, setCollections] = useState();
   const [allUserCollections, setAllUserCollections] = useState();
   const [deletingItemId, setDeletingItemId] = useState(null);
+  const [postID, setPostID]= useState('')
   const [firstTimeLogin, setFirstTimelogin] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false)
@@ -33,7 +34,7 @@ const Home = (props) => {
     const doc = await bookmarks.doc(user?.id).get();
     if (doc.exists) {
       const allData = doc.data();
-      setBookmarkedPosts(allData.bookmarks);
+      setBookmarkedPosts(allData.bookmarks || []);
     }
   }
 
@@ -149,12 +150,16 @@ const Home = (props) => {
         newId = 0
         const postData = { id: `${postId}_${newId}`, PostTitle: sessionPostTitle, PostDescription: sessionPostDescription, image: url };
         await postsRef.set({ posts: [postData] });
+        const postItemId = `${postId}_${newId}`
+        setPostID(postItemId)
       } else {
         const posts = doc.data().posts || [];
         const maxId = posts.reduce((max, post) => Math.max(max, parseInt(post.id.split('_')[1])), -1);
         newId = maxId + 1;
         const postData = { id: `${postId}_${newId}`, PostTitle: sessionPostTitle, PostDescription: sessionPostDescription, image: url };
         await postsRef.update({ posts: firestore.FieldValue.arrayUnion(postData) });
+        const postItemId = `${postId}_${newId}`
+        setPostID(postItemId)
       }
       setLoading(false)
       Snackbar.show({
@@ -323,7 +328,7 @@ const Home = (props) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) =>
-              (<CardScreen deleteCollection={deleteCollection} deletingItemId={deletingItemId} isDeleting={isDeleting} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts.some(bookmark => bookmark.id === item.id)} isOwner={item.id.startsWith(user.postId)} />)
+              (<CardScreen deleteCollection={deleteCollection} deletingItemId={deletingItemId} isDeleting={isDeleting} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts && bookmarkedPosts.some(bookmark => bookmark.id === item.id)} isOwner={item.id.startsWith(user.postId)} />)
             }
             keyExtractor={item => item?.id}
           />
@@ -337,7 +342,7 @@ const Home = (props) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) =>
-              (<CardScreen loading={loading} deleteCollection={deleteCollection} isDeleting={isDeleting}  deletingItemId={deletingItemId} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts.some(bookmark => bookmark.id === item.id)} isOwner={item.id.startsWith(user.postId)} />)
+              (<CardScreen isSaving={postID === item.id} loading={loading} deleteCollection={deleteCollection} isDeleting={isDeleting}  deletingItemId={deletingItemId} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts && bookmarkedPosts.some(bookmark => bookmark.id === item.id)} isOwner={item.id.startsWith(user.postId)} />)
             }
             keyExtractor={item => item?.id}
           />

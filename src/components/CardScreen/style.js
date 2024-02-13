@@ -25,6 +25,7 @@ export default styles = StyleSheet.create({
    
     cardTitle: {
         fontSize: RFPercentage(1.8),
+        width:'72%',
         color: '#000',
         fontWeight: '700',
     },

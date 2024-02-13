@@ -20,7 +20,7 @@ export default function LoaderModal(props) {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <LottieView style={styles.lottie} source={require('../../assets/A2.json')} autoPlay loop={false} />
+                        <LottieView style={styles.lottie} source={require('../../assets/A6.json')} autoPlay loop={false} />
                         <Text style={styles.modalText}>Welcome To blogger app.</Text>
                         <TouchableOpacity style={styles.closeButton} onPress={props?.closeModal}>
                             <Text style={styles.okText}>OK</Text>

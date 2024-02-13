@@ -7,10 +7,10 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 
-const CardScreen = (props) => {
+const CardScreen = (props) => { 
     return (
-        <Card style={styles.card} mode='contained' onPress={() => props?.navigation.navigate('CardDetail', { item: props?.item })} >
-            {props?.loading || (props?.isDeleting && props?.deleteItemId === props?.item?.id) ? <ActivityIndicator color="black" size="large" /> :
+        <Card style={styles.card} mode='contained' onPress={() => props?.navigation.navigate('CardDetail', { item: props?.item ,isBookmarked: props?.isBookmarked ,isOwner: props?.isOwner,deleteCollection:props?.deleteCollection, bookmarkArticle:props?.bookmarkArticle})} >
+            {(props?.loading && props.isSaving) || (props?.isDeleting && props?.deleteItemId === props?.item?.id) ? <ActivityIndicator color="black" size="large" /> :
                 <>
                     <View style={styles.image}>
                         <Card.Cover source={{ uri: props?.item?.image }} style={styles.cardImage} />
