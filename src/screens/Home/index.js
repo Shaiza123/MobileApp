@@ -328,7 +328,7 @@ const Home = (props) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) =>
-              (<CardScreen deleteCollection={deleteCollection} deletingItemId={deletingItemId} isDeleting={isDeleting} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts && bookmarkedPosts.some(bookmark => bookmark.id === item.id)} isOwner={item.id.startsWith(user.postId)} />)
+              (<CardScreen deleteCollection={deleteCollection} deletingItemId={deletingItemId} isDeleting={isDeleting} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts && bookmarkedPosts.some(bookmark => bookmark.id === item?.id)} isOwner={item.id.startsWith(user.postId)} />)
             }
             keyExtractor={item => item?.id}
           />
@@ -342,7 +342,7 @@ const Home = (props) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) =>
-              (<CardScreen isSaving={postID === item.id} loading={loading} deleteCollection={deleteCollection} isDeleting={isDeleting}  deletingItemId={deletingItemId} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts && bookmarkedPosts.some(bookmark => bookmark.id === item.id)} isOwner={item.id.startsWith(user.postId)} />)
+              (<CardScreen isSaving={postID === item.id} loading={loading} deleteCollection={deleteCollection} isDeleting={isDeleting}  deletingItemId={deletingItemId} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts && bookmarkedPosts.some(bookmark => bookmark.id === item?.id) } isOwner={item.id.startsWith(user.postId)} />)
             }
             keyExtractor={item => item?.id}
           />
