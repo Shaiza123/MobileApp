@@ -6,8 +6,7 @@ export default styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: "#ffffff",
-    // paddingBottom: hp(5),
-    gap: 20,
+    gap: 5,
     paddingHorizontal: '3%',
     paddingVertical:'8%'
   },
@@ -30,12 +29,6 @@ export default styles = StyleSheet.create({
     padding: wp(2),
     margin: hp(2)
   },
-  // forgotPassword: {
-  //   marginTop: wp(0.2),
-  //   marginBottom: wp(2.5),
-  //   marginLeft: wp(50),
-  //   color: "#95B6FF"
-  // },
   errors: {
     fontSize: RFPercentage(1.5),
     color: 'red',
@@ -44,6 +37,7 @@ export default styles = StyleSheet.create({
     width: '70%'
   },
   forgotPassword: {
+    marginTop:hp(2),
     fontSize: hp(2),
     color: '#0147AB',
     textAlign: 'center',
@@ -70,7 +64,6 @@ export default styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: RFPercentage(2),
-    // color: '#707070',
     fontWeight:'normal'
   },
 })

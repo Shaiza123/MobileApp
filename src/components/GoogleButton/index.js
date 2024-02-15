@@ -1,7 +1,6 @@
 import { View, Text, Image } from 'react-native'
 import React from 'react'
 import styles from '../ButtonScreen/style';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Button } from 'react-native-paper';
 
 const GoogleButton = ({googleButton}) => {

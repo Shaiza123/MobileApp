@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React, { useEffect } from 'react'
+import React from 'react'
 import styles from '../../components/Header/style';
 import BackButton from '../BackButton/index';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -40,15 +40,22 @@ const Header = (props) => {
                                   <Text style={[styles.headingText, { marginLeft: hp(3) }]}>BookMark Articles</Text>
                                 </View>
                                 :
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                  <Image source={require('../../assets/logo.png')} style={styles.image} />
-                                  <Text style={styles.headingText}>Home</Text>
-                                  <View style={{ alignItems: 'flex-end', flex: 1 }}>
-                                    <TouchableOpacity onPress={() => props?.navigation?.navigate('BookMark', { bookmarkArticle: props?.bookmarkArticle})}>
-                                      <FontAwesome name="bookmark-o" size={hp(3)} color="#0147AB" />
-                                    </TouchableOpacity>
-                                  </View>
-                                </View>
+                                <>
+                                  {props?.children === 'Edit Profile' ?
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                      <BackButton navigation={props?.navigation} />
+                                      <Text style={[styles.headingText, { marginLeft: hp(3) }]}>Edit Profile</Text>
+                                    </View>
+                                    :
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                      <Image source={require('../../assets/logo.png')} style={styles.image} />
+                                      <Text style={styles.headingText}>Home</Text>
+                                      <TouchableOpacity style={{ alignItems: 'flex-end', flex: 1 }} onPress={() => props?.navigation?.navigate('BookMark', { bookmarkArticle: props?.bookmarkArticle })}>
+                                        <FontAwesome name="bookmark-o" size={hp(3)} color="#0147AB" />
+                                      </TouchableOpacity>
+                                    </View>
+                                  }
+                                </>
                               }
                             </>
                           }

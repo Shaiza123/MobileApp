@@ -13,7 +13,7 @@ import LottieView from 'lottie-react-native';
 
 const Home = (props) => {
   const [isDeleting, setIsDeleting] = useState(false);
-  const [collections, setCollections] = useState();
+  const [collections, setCollections] = useState([]);
   const [allUserCollections, setAllUserCollections] = useState();
   const [deletingItemId, setDeletingItemId] = useState(null);
   const [postID, setPostID]= useState('')
@@ -96,7 +96,7 @@ const Home = (props) => {
 
       if (doc.exists) {
         const allData = doc.data();
-        setCollections(allData?.posts);
+        setCollections(allData?.posts || []);
       } else {
         console.log("no doc");
       }
@@ -336,7 +336,7 @@ const Home = (props) => {
       </View>
       <Text style={styles.textHeading}>Your Articles</Text>
       <View style={styles.allDataContainer}>
-        {collections ?
+        {collections && collections.length > 0 ?
           <FlatList
             data={collections}
             horizontal

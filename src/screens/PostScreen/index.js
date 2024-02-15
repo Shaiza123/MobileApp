@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
-import { View, TouchableOpacity, Alert, ScrollView, KeyboardAvoidingView, BackHandler, Image } from "react-native";
+import { View, TouchableOpacity, Alert, ScrollView, KeyboardAvoidingView, BackHandler} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import styles from "./style"
 import TextInputScreen from '../../components/TextinputScreen/index'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { FloatingAction } from "react-native-floating-action";
 import ImagePicker from 'react-native-image-crop-picker';
-import BackButton from "../../components/BackButton/index";
 import Header from "../../components/Header/index";
 
 
 export default function PostScreen(props) {
-  const [loading, setLoading] = useState(false)
   const [postTitle, setPostTitle] = useState('');
   const [postDescription, setPostDescription] = useState('');
   const [image, setImage] = useState(null);
@@ -20,9 +18,6 @@ export default function PostScreen(props) {
 
   const takepicture = () => {
     ImagePicker.openCamera({
-      // width: 600,
-      // height: 400,
-      // cropping: true,
     }).then(image => {
       setImage(image?.path)
     }).catch((err) => { console.log("catch" + err) })
@@ -30,9 +25,6 @@ export default function PostScreen(props) {
 
   const chooseFromLibrary = () => {
     ImagePicker.openPicker({
-      // width: 600,
-      // height: 400,
-      // cropping: true
     }).then(image => {
       setImage(image?.path)
     }).catch((err) => { console.log("catch" + err) })
@@ -53,7 +45,6 @@ export default function PostScreen(props) {
   ];
 
   const handleSubmit = () => {
-    setLoading(true);
     props.navigation.navigate('HomeScreens', {
       screen: 'Home',
       params: {
@@ -62,16 +53,10 @@ export default function PostScreen(props) {
           image: image,
       },
     });
-    setLoading(false)
     setPostTitle('');
     setPostDescription('')
     setImage(null)
   };
-  
-  // useEffect(() => {
-  //   cancelImage();
-  // }, [image])
-
 
   const cancelImage = () => {
     setImage(null)
@@ -140,7 +125,6 @@ export default function PostScreen(props) {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    // keyboardVerticalOffset={100}
     >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="always" showsVerticalScrollIndicator={false} >
         <View style={styles.container}>

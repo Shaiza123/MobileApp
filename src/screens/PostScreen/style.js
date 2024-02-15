@@ -9,7 +9,6 @@ export default styles = StyleSheet.create({
       gap: 2,
       paddingHorizontal: '3%',
       paddingBottom:'40%',
-      // justifyContent:'center',
     },
     image:{
       width:wp(35),

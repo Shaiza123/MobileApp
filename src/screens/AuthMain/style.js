@@ -8,7 +8,7 @@ export default styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#ffffff",
-        gap:10,
+        gap:5,
         paddingBottom: hp(5)
     },
     input: {
@@ -72,7 +72,6 @@ export default styles = StyleSheet.create({
       },
       buttonText: {
         fontSize: RFPercentage(2),
-        // color: '#000',
         fontWeight:'normal'
       },
       heading:{

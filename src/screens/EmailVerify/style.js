@@ -6,8 +6,7 @@ export default styles = StyleSheet.create({
     container: {
         flex:1,
         backgroundColor: "#ffffff",
-        // paddingBottom: hp(5),
-        gap: 20,
+        gap: 5,
         paddingHorizontal: '3%',
         paddingVertical:'8%'
         

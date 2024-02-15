@@ -4,7 +4,7 @@ import styles from '../ButtonScreen/style';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import { Button } from 'react-native-paper';
 
-const ButtonScreen = ({ children, isDisabled, valueEmail, valuePassword, valueConfirmPassword, handleSubmit, valuePostTitle, valuePostDescription, valueAge, valueGender, handleNavigation ,image}) => {
+const ButtonScreen = ({ children, isDisabled, valueEmail, valuePassword, valueConfirmPassword, handleSubmit, valuePostTitle, valuePostDescription, valueFirstName, valueLastName, valuePhoneNumber, valueCountry, valueCity, handleNavigation ,image}) => {
     return (
         <View style={[styles.container, { marginTop: hp('3%') }]}>
             <Button style={[styles.button, { borderColor: isDisabled ? '#f48fb0' : '#000' }]} textColor='#fff' mode='contained' buttonColor={'#0147AB'} onPress={() => {
@@ -12,7 +12,7 @@ const ButtonScreen = ({ children, isDisabled, valueEmail, valuePassword, valueCo
                     handleSubmit();
                 }
                 else if (children === 'Update') {
-                    handleSubmit(valueAge, valueGender);
+                    handleSubmit(valueFirstName, valueLastName,valuePhoneNumber,valueCountry,valueCity);
                 }
                 else if (children === 'Sign In with password') {
                     handleNavigation();
@@ -20,7 +20,8 @@ const ButtonScreen = ({ children, isDisabled, valueEmail, valuePassword, valueCo
                     console.log('else');
                 }
             }}
-                disabled={children === 'Sign Up' ? (valueEmail && valuePassword && valueConfirmPassword ? false : true) : children === 'Login' ? (valueEmail && valuePassword ? false : true) : children === 'Submit' ? (valueEmail ? false : true) : children === 'Send' ? (valuePostTitle && valuePostDescription && image ? false : true) : children === 'Update' ? (valueAge && valueGender ? false : true) : false}
+                disabled={children === 'Sign Up' ? (valueEmail && valuePassword && valueConfirmPassword ? false : true) : children === 'Login' ? (valueEmail && valuePassword ? false : true) : children === 'Submit' ? (valueEmail ? false : true) : children === 'Send' ? (valuePostTitle && valuePostDescription && image ? false : true) : 
+                children === 'Update' ? (valueFirstName && valueLastName && valuePhoneNumber && valueCountry && valueCity ? false : true) : false}
                 contentStyle={{
                     paddingHorizontal: wp(15),
                     paddingVertical: wp(2)

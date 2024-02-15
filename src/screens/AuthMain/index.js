@@ -21,12 +21,10 @@ const AuthMain = ({ navigation }) => {
             const { idToken } = await GoogleSignin.signIn();
             const googleCredential = auth.GoogleAuthProvider.credential(idToken);
             const userCredential = await auth().signInWithCredential(googleCredential);
-            console.log("usercrediantials", userCredential.user);
             const documentSnapshot = await firestore().collection('users').doc(userCredential?.user?.uid).get();
 
             if (documentSnapshot.exists) {
                 const postId = documentSnapshot.data().postId;
-                console.log('user verified')
                 dispatch(login({ id: userCredential?.user?.uid, email: userCredential?.user?.email, postId }));
             }
             else {
@@ -92,7 +90,6 @@ const AuthMain = ({ navigation }) => {
     return (
         <View style={styles.mainContainer}>
             <Image source={require('../../assets/Login.png')}
-            // style={{width:'100%', height:'100%' ,resizeMode:'contain'}}
             />
             <Text style={styles.heading}>Let's you in</Text>
             {Platform.OS === 'android' ?
@@ -112,6 +109,6 @@ const AuthMain = ({ navigation }) => {
             </View>
         </View>
     );
-}   
-          
+}
+
 export default AuthMain;      

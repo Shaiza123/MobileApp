@@ -1,91 +1,85 @@
 import React, { useState, useRef } from 'react';
-import auth from '@react-native-firebase/auth';
-import { Text, View, ActivityIndicator, Alert } from 'react-native';
-import { useDispatch } from 'react-redux'
-import { signout } from '../../redux/Reducer'
+import { View, ScrollView, KeyboardAvoidingView, ImageBackground, TouchableOpacity } from 'react-native';
 import styles from '../Profile/style'
 import { useSelector } from 'react-redux'
 import firestore from '@react-native-firebase/firestore';
 import TextInputScreen from '../../components/TextinputScreen/index'
-import { Button } from 'react-native-paper';
+import Header from '../../components/Header/index'
+import { FloatingAction } from "react-native-floating-action";
+import ImagePicker from 'react-native-image-crop-picker';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
-const Profile = ({ navigation }) => {
-  const [age, setAge] = useState('');
-  const [delAccountloading, setDelAccountLoading] = useState(false)
-  const [logoutloading, setLogoutLoading] = useState(false)
+
+const Profile = (props) => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [country, setCountry] = useState('');
+  const [city, setCity] = useState('');
+  const [image, setImage] = useState(require('../../assets/userProfile.jpg'));
   const [loading, setLoading] = useState(false)
-  const [gender, setGender] = useState('');
   const user = useSelector((state) => state.user)
-
-  const ageRef = useRef(null);
-  const genderRef = useRef(null);
-
-  const deleteAccount = async () => {
-    try {
-      setDelAccountLoading(true)
-      const confirmDelete = await new Promise((resolve, reject) => {
-        Alert.alert(
-          'Confirm Deletion',
-          `Are you sure you want to delete collection '${user?.email}'?`,
-          [
-            {
-              text: 'No',
-              onPress: () => resolve(false),
-              style: 'cancel',
-            },
-            {
-              text: 'Yes',
-              onPress: () => resolve(true),
-              style: 'destructive',
-            },
-          ],
-          { cancelable: true }
-        );
-      });
-
-      if (!confirmDelete) {
-        return;
-      }
-      const userDocRef = firestore().collection('users').doc(user.id);
-      await userDocRef.delete();
-      await auth().currentUser.delete();
-      dispatch(signout());
-      console.log('User account deleted!');
-    } catch (error) {
-      console.error("Error during account deletion:", error);
-    }
-    finally {
-      setDelAccountLoading(false)
-    }
-  };
-
-  const dispatch = useDispatch()
-  const logout = async () => {
-    try {
-      setLogoutLoading(true)
-      await auth().signOut();
-      dispatch(signout());
-    } catch (error) {
-      console.error("Error during logout:", error);
-    }
-    finally {
-      setLogoutLoading(false)
+  const floatingActionRef = useRef(null)
+  const onCameraIconPress = () => {
+    if (floatingActionRef.current) {
+      floatingActionRef.current.animateButton();
     }
   }
-  const handleSubmit = async (age, gender) => {
+
+  const takepicture = () => {
+    ImagePicker.openCamera({
+    }).then(image => {
+      setImage(image?.path)
+    }).catch((err) => { console.log("catch" + err) })
+  }
+
+  const chooseFromLibrary = () => {
+    ImagePicker.openPicker({
+    }).then(image => {
+      setImage(image?.path)
+    }).catch((err) => { console.log("catch" + err) })
+  }
+  const actions = [
+    {
+      text: "Take Photo",
+      icon: <Ionicons name="camera-outline" size={20} color="#FFF" />,
+      name: "Take Photo",
+      position: 1
+    },
+    {
+      text: "Choose Photo",
+      icon: <Ionicons name="images-outline" size={20} color="#FFF" />,
+      name: "Choose Photo",
+      position: 2
+    },
+  ];
+
+
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const phoneNumberRef = useRef(null);
+  const countryRef = useRef(null);
+  const cityRef = useRef(null);
+
+  const handleSubmit = async (firstName, lastName, phoneNumber, country, city) => {
     try {
       setLoading(true)
       if (!user.id) {
         console.error('User ID is undefined.');
         return;
       }
-      if (age === undefined || gender === undefined) {
+      if (firstName === undefined || lastName === undefined || phoneNumber === undefined || country === undefined || city === undefined) {
         console.error('Invalid data. Aborting update.');
         return;
       }
-      await firestore().collection('users').doc(user.id).update({ age: age, gender: gender });
-      setAge('')
-      setGender('')
+      await firestore().collection('users').doc(user.id).update({ firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, country: country, city: city });
+      setFirstName('')
+      setLastName('')
+      setPhoneNumber('')
+      setCountry('')
+      setCity('')
     }
     catch (err) {
       console.log('adhhjahs', err)
@@ -96,23 +90,40 @@ const Profile = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.mainContainer}>
-      <TextInputScreen setAge={setAge} age={age} gender={gender} setGender={setGender} handleSubmit={handleSubmit} path={'Edit'} ageRef={ageRef} genderRef={genderRef} loading={loading} />
-      <View style={styles.buttonContainer}>
-      {delAccountloading ? <ActivityIndicator size="small" color="#0000ff" /> :
-        <Button style={styles.button} mode='contained' buttonColor={'red'} onPress={() => deleteAccount()}
-        >
-          <Text style={styles.buttonText}>Delete My Account</Text>
-        </Button>
-      }
-      {logoutloading ? <ActivityIndicator size="small" color="#0000ff" /> :
-        <Button style={styles.button} mode='contained' buttonColor={'#f48fb0'} onPress={() => logout()}
-        >
-          <Text style={styles.buttonText}>Logout</Text> 
-        </Button>
-      }
-      </View>
-    </View>
+    <KeyboardAvoidingView style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="always" >
+        <View style={styles.mainContainer}>
+          <Header children={'Edit Profile'} navigation={props?.navigation} />
+          <View style={{ justifyContent: 'center', alignItems: 'center', margin: hp(2) }}>
+            <View style={{ height: hp(15), width: hp(15), borderRadius: hp(20) }}>
+              <ImageBackground source={typeof image === 'string' ? { uri: image }: image} style={styles.drawerImage} imageStyle={{ borderRadius: hp(20) }} >
+                <TouchableOpacity style={styles.cameraContainer} onPress={onCameraIconPress}>
+                  <FontAwesome name="camera" size={hp(4)} color="#fff" />
+                </TouchableOpacity>
+              </ImageBackground>
+            </View>
+
+          </View>
+          <TextInputScreen firstName={firstName} setFirstName={setFirstName} lastName={lastName} setLastName={setLastName} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} country={country} setCountry={setCountry} city={city} setCity={setCity}
+            handleSubmit={handleSubmit} path={'Edit'}
+            firstNameRef={firstNameRef}
+            lastNameRef={lastNameRef}
+            phoneNumberRef={phoneNumberRef}
+            countryRef={countryRef}
+            cityRef={cityRef}
+            loading={loading} />
+            <FloatingAction
+              ref={floatingActionRef}
+              actions={actions}
+              onPressItem={name => {
+                { name === 'Take Photo' ? takepicture() : chooseFromLibrary() }
+              }}
+            />
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 
 }

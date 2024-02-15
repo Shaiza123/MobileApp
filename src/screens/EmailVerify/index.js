@@ -5,7 +5,6 @@ import auth from '@react-native-firebase/auth';
 import { useDispatch } from 'react-redux'
 import { login } from '../../redux/Reducer'
 import styles from './style'
-import BackButton from '../../components/BackButton/index';
 import Header from '../../components/Header/index';
 
 const EmailVerify = (props) => {
@@ -23,17 +22,13 @@ const EmailVerify = (props) => {
             if (user) {
                 await user.reload();
                 const updatedUser = auth().currentUser;
-                console.log("Updated User Data:", updatedUser);
-
                 if (updatedUser?.emailVerified) {
                     setVerifiedUser(true)
                     setTimeout(() => {
                        dispatch(login({ id: updatedUser?.uid, email: updatedUser?.email, productsId: postId}));
                     }, 3000);
-
                 }
 
-                console.log("Updated User Data:", updatedUser);
             } else {
                 console.error("No user is currently signed in.");
             }

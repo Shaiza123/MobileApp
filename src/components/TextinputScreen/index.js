@@ -1,8 +1,9 @@
-import { View, Text, Keyboard, ActivityIndicator, } from 'react-native'
+import { View, Text, Keyboard, ActivityIndicator} from 'react-native'
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import Entypo from 'react-native-vector-icons/Entypo'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import styles from '../../components/TextinputScreen/style';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -216,7 +217,7 @@ const TextinputScreen = (props) => {
                         <View style={styles.inputContainer}>
                             <TextInput
                                 style={styles.input}
-                                placeholder="What's on your mind?"
+                                placeholder="Give your post a title"
                                 keyboardType="default"
                                 onChangeText={props?.setPostTitle}
                                 value={props?.postTitle}
@@ -229,15 +230,13 @@ const TextinputScreen = (props) => {
                                 activeUnderlineColor='#0147AB'
                                 textColor='#707070'
                                 mode='flat'
-                            // right={<TextInput.Icon icon={() => <MaterialCommunityIcons name="post" size={hp(2.5)} color="#000" />} />}
                             />
                         </View>
                         <Text style={styles.text}>Description</Text>
                         <View style={styles.inputContainer}>
                             <TextInput
-                                // underlineColorAndroid="transparent"
                                 style={styles.input}
-                                placeholder="What's on your mind?"
+                                placeholder="Write your post content here"
                                 onChangeText={props?.setPostDescription}
                                 value={props?.postDescription}
                                 ref={props?.postDescriptionRef}
@@ -269,51 +268,99 @@ const TextinputScreen = (props) => {
                     </View>
                 ) :
                     <View>
-                        <Text style={styles.text}>Age</Text>
                         <View style={styles.inputContainer}>
                             <TextInput
                                 style={styles.input}
-                                placeholder="Enter your Age"
-                                keyboardType='numeric'
-                                onChangeText={props?.setAge}
-                                value={props?.age}
-                                ref={props?.ageRef}
-                                onSubmitEditing={() => props?.genderRef?.current?.focus()}
+                                placeholder="Enter your First Name"
+                                keyboardType='default'
+                                onChangeText={props?.setFirstName}
+                                value={props?.firstName}
+                                ref={props?.firstNameRef}
+                                onSubmitEditing={() => props?.lastNameRef?.current?.focus()}
                                 autoFocus={false}
                                 blurOnSubmit={false}
-                                underlineColor="transparent"
-                                activeUnderlineColor='transparent'
+                                underlineColor="#fff"
+                                activeUnderlineColor='#fff'
                                 textColor='#707070'
-                                mode='outlined'
-                                outlineColor='#000'
-                                activeOutlineColor='#000'
-                                right={<TextInput.Icon icon={() => <MaterialIcons name="manage-accounts" size={hp(2.5)} color="#5dcfb6" />} />}
+                                mode='flat'
+                                left={<TextInput.Icon icon={() => <FontAwesome name="user" size={hp(2.5)} color="#0147AB" />} />}
                             />
                         </View>
-                        <Text style={styles.text}>Gender</Text>
                         <View style={styles.inputContainer}>
                             <TextInput
                                 style={styles.input}
-                                placeholder="Enter your Gender"
-                                keyboardType="ascii-capable"
-                                onChangeText={props?.setGender}
-                                value={props?.gender}
+                                placeholder="Enter your Last Name"
+                                keyboardType="default"
+                                onChangeText={props?.setLastName}
+                                value={props?.lastName}
                                 blurOnSubmit={false}
-                                ref={props?.genderRef}
+                                ref={props?.lastNameRef}
+                                onSubmitEditing={() =>  props?.phoneNumberRef?.current?.focus()}
+                                autoFocus={false}
+                                underlineColor="#fff"
+                                activeUnderlineColor='#fff'
+                                textColor='#707070'
+                                mode='flat'
+                                left={<TextInput.Icon icon={() => <FontAwesome name="user" size={hp(2.5)} color="#0147AB" />} />}
+                            />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Enter your Phone Number"
+                                keyboardType="numeric"
+                                onChangeText={props?.setPhoneNumber}
+                                value={props?.phoneNumber}
+                                blurOnSubmit={false}
+                                ref={props?.phoneNumberRef}
+                                onSubmitEditing={() =>  props?.countryRef?.current?.focus()}
+                                autoFocus={false}
+                                underlineColor="#fff"
+                                activeUnderlineColor='#fff'
+                                textColor='#707070'
+                                mode='flat'
+                                left={<TextInput.Icon icon={() => <FontAwesome name="phone" size={hp(2.5)} color="#0147AB" />} />}
+                            />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Enter your Country"
+                                keyboardType="default"
+                                onChangeText={props?.setCountry}
+                                value={props?.country}
+                                blurOnSubmit={false}
+                                ref={props?.countryRef}
+                                onSubmitEditing={() => props?.cityRef?.current?.focus()}
+                                autoFocus={false}
+                                underlineColor="#fff"
+                                activeUnderlineColor='#fff'
+                                textColor='#707070'
+                                mode='flat'
+                                left={<TextInput.Icon icon={() => <FontAwesome name="globe" size={hp(2.5)} color="#0147AB" />} />}
+                            />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Enter your City"
+                                keyboardType="default"
+                                onChangeText={props?.setCity}
+                                value={props?.city}
+                                blurOnSubmit={false}
+                                ref={props?.cityRef}
                                 onSubmitEditing={() => Keyboard.dismiss()}
                                 autoFocus={false}
-                                underlineColor="transparent"
-                                activeUnderlineColor='transparent'
+                                underlineColor="#fff"
+                                activeUnderlineColor='#fff'
                                 textColor='#707070'
-                                mode='outlined'
-                                outlineColor='#000'
-                                activeOutlineColor='#000'
-                                right={<TextInput.Icon icon={() => <MaterialIcons name="manage-accounts" size={hp(2.5)} color="#5dcfb6" />} />}
+                                mode='flat'
+                                left={<TextInput.Icon icon={() => <Entypo name="location" size={hp(2.5)} color="#0147AB" />} />}
                             />
                         </View>
                         {props?.loading ? <ActivityIndicator size="small" color="#0000ff" /> :
                             <>
-                                <ButtonScreen handleSubmit={props?.handleSubmit} children={'Update'} valueAge={props?.age} valueGender={props?.gender} />
+                                <ButtonScreen handleSubmit={props?.handleSubmit} children={'Update'} valueFirstName={props?.firstName} valueLastName={props?.lastName} valuePhoneNumber={props?.phoneNumber} valueCountry={props?.country} valueCity={props?.city} />
                             </>
                         }
                     </View>

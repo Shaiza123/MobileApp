@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, Linking, KeyboardAvoidingView, ScrollView } from 'react-native'
+import { Text, View, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import styles from "./style"
 import auth from '@react-native-firebase/auth';
@@ -53,7 +53,6 @@ const ForgotPassword = ({ navigation }) => {
     return (
         <KeyboardAvoidingView style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        // keyboardVerticalOffset={100}
         >
             <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="always" >
                 <View style={styles.container}>

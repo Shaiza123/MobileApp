@@ -136,7 +136,6 @@ const Login = ({ navigation }) => {
     return (
         <KeyboardAvoidingView style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        // keyboardVerticalOffset={100}
         >
             <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="always" >
                 <View style={styles.mainContainer}>

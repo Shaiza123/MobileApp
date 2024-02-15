@@ -7,7 +7,6 @@ export default function LoaderModal(props) {
     const closeModal = () => {
         props?.closeModal();
     }
-
     return (
         <View>
             <Modal

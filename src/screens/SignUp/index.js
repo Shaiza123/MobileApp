@@ -1,8 +1,7 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState } from 'react'
 import { View, ScrollView, KeyboardAvoidingView} from 'react-native'
 import auth from '@react-native-firebase/auth';
 import * as Yup from 'yup';
-import { useSelector } from 'react-redux'
 import firestore from "@react-native-firebase/firestore";
 import styles from './style'
 import { useCallback } from 'react';
@@ -17,11 +16,7 @@ const SignUp = ({ navigation }) => {
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
-    const user = useSelector((state) => state.user)
 
-    useEffect(() => {
-        console.log("Redux user", user)
-    }, [])
 
     // Validation schema for sign up form
     const loginValidationsSchema = Yup.object().shape({
@@ -113,7 +108,6 @@ const SignUp = ({ navigation }) => {
     return (
         <KeyboardAvoidingView style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            // keyboardVerticalOffset={100}
             >
             <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="always" >
                 <View style={styles.container}>
