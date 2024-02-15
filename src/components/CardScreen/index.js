@@ -10,8 +10,6 @@ import { useFocusEffect } from '@react-navigation/native';
 
 
 const CardScreen = (props) => {
-    // console.log('props', props?.children)
-    // console.log(props?.isBookmarked)
     const [isBookmarked, setIsBookmarked] = useState(props?.isBookmarked);
     useFocusEffect(
         useCallback(() => {

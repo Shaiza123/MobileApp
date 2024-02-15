@@ -1,16 +1,15 @@
 import React, { useState, useRef } from 'react';
-import { View, ScrollView, KeyboardAvoidingView, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, ScrollView, KeyboardAvoidingView, ImageBackground, TouchableOpacity, Text } from 'react-native';
 import styles from '../Profile/style'
 import { useSelector } from 'react-redux'
 import firestore from '@react-native-firebase/firestore';
 import TextInputScreen from '../../components/TextinputScreen/index'
 import Header from '../../components/Header/index'
-import { FloatingAction } from "react-native-floating-action";
 import ImagePicker from 'react-native-image-crop-picker';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-
+import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
+import storage from '@react-native-firebase/storage';
 
 const Profile = (props) => {
   const [firstName, setFirstName] = useState('');
@@ -21,12 +20,7 @@ const Profile = (props) => {
   const [image, setImage] = useState(require('../../assets/userProfile.jpg'));
   const [loading, setLoading] = useState(false)
   const user = useSelector((state) => state.user)
-  const floatingActionRef = useRef(null)
-  const onCameraIconPress = () => {
-    if (floatingActionRef.current) {
-      floatingActionRef.current.animateButton();
-    }
-  }
+  const postId = user?.postId;
 
   const takepicture = () => {
     ImagePicker.openCamera({
@@ -41,21 +35,6 @@ const Profile = (props) => {
       setImage(image?.path)
     }).catch((err) => { console.log("catch" + err) })
   }
-  const actions = [
-    {
-      text: "Take Photo",
-      icon: <Ionicons name="camera-outline" size={20} color="#FFF" />,
-      name: "Take Photo",
-      position: 1
-    },
-    {
-      text: "Choose Photo",
-      icon: <Ionicons name="images-outline" size={20} color="#FFF" />,
-      name: "Choose Photo",
-      position: 2
-    },
-  ];
-
 
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
@@ -63,7 +42,7 @@ const Profile = (props) => {
   const countryRef = useRef(null);
   const cityRef = useRef(null);
 
-  const handleSubmit = async (firstName, lastName, phoneNumber, country, city) => {
+  const handleSubmit = async (firstName, lastName, phoneNumber, country, city,image) => {
     try {
       setLoading(true)
       if (!user.id) {
@@ -74,12 +53,19 @@ const Profile = (props) => {
         console.error('Invalid data. Aborting update.');
         return;
       }
-      await firestore().collection('users').doc(user.id).update({ firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, country: country, city: city });
+      const sessionFolder = `${postId}`;
+      const userId = 'userId'
+      const imageName = `${sessionFolder}/${sessionFolder}_${userId}.jpg`;
+      const reference = storage().ref(imageName);
+      await reference.putFile(image);
+      const url = await storage().ref(imageName).getDownloadURL();
+      await firestore().collection('users').doc(user.id).update({ firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, country: country, city: city, url: url });
       setFirstName('')
       setLastName('')
       setPhoneNumber('')
       setCountry('')
       setCity('')
+      setImage(require('../../assets/userProfile.jpg'))
     }
     catch (err) {
       console.log('adhhjahs', err)
@@ -96,15 +82,25 @@ const Profile = (props) => {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="always" >
         <View style={styles.mainContainer}>
           <Header children={'Edit Profile'} navigation={props?.navigation} />
-          <View style={{ justifyContent: 'center', alignItems: 'center', margin: hp(2) }}>
-            <View style={{ height: hp(15), width: hp(15), borderRadius: hp(20) }}>
-              <ImageBackground source={typeof image === 'string' ? { uri: image }: image} style={styles.drawerImage} imageStyle={{ borderRadius: hp(20) }} >
-                <TouchableOpacity style={styles.cameraContainer} onPress={onCameraIconPress}>
-                  <FontAwesome name="camera" size={hp(4)} color="#fff" />
-                </TouchableOpacity>
-              </ImageBackground>
-            </View>
-
+          <View style={{ alignItems: 'center', justifyContent: 'center',flexDirection:'row' }}>
+            <ImageBackground source={typeof image === 'string' ? { uri: image } : image} style={styles.drawerImage} imageStyle={{ borderRadius: hp(20) }} />
+            <Menu>
+              <MenuTrigger>
+                  <FontAwesome name="edit" size={hp(3.5)} color="#0147AB" style={{marginTop:hp(12)}}/>
+              </MenuTrigger>
+              <MenuOptions>
+                <MenuOption onSelect={() => takepicture()}>
+                  <View style={styles.menuItem}>
+                    <Text style={styles.menuItemText}>Take Photo</Text>
+                  </View>
+                </MenuOption>
+                <MenuOption onSelect={() => chooseFromLibrary()}>
+                  <View style={styles.menuItem}>
+                    <Text style={styles.menuItemText}>choose From Library</Text>
+                  </View>
+                </MenuOption>
+              </MenuOptions>
+            </Menu>
           </View>
           <TextInputScreen firstName={firstName} setFirstName={setFirstName} lastName={lastName} setLastName={setLastName} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} country={country} setCountry={setCountry} city={city} setCity={setCity}
             handleSubmit={handleSubmit} path={'Edit'}
@@ -113,14 +109,9 @@ const Profile = (props) => {
             phoneNumberRef={phoneNumberRef}
             countryRef={countryRef}
             cityRef={cityRef}
-            loading={loading} />
-            <FloatingAction
-              ref={floatingActionRef}
-              actions={actions}
-              onPressItem={name => {
-                { name === 'Take Photo' ? takepicture() : chooseFromLibrary() }
-              }}
-            />
+            loading={loading}
+            image={image}
+             />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

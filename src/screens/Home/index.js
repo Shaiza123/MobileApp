@@ -91,9 +91,7 @@ const Home = (props) => {
   const getAllData = async () => {
     try {
       const posts = firestore().collection('Posts');
-
       const doc = await posts.doc(postId).get();
-
       if (doc.exists) {
         const allData = doc.data();
         setCollections(allData?.posts || []);

@@ -4,7 +4,7 @@ import styles from '../ButtonScreen/style';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import { Button } from 'react-native-paper';
 
-const ButtonScreen = ({ children, isDisabled, valueEmail, valuePassword, valueConfirmPassword, handleSubmit, valuePostTitle, valuePostDescription, valueFirstName, valueLastName, valuePhoneNumber, valueCountry, valueCity, handleNavigation ,image}) => {
+const ButtonScreen = ({ children, isDisabled, valueEmail, valuePassword, valueConfirmPassword, handleSubmit, valuePostTitle, valuePostDescription, valueFirstName, valueLastName, valuePhoneNumber, valueCountry, valueCity, handleNavigation ,image,valueImage}) => {
     return (
         <View style={[styles.container, { marginTop: hp('3%') }]}>
             <Button style={[styles.button, { borderColor: isDisabled ? '#f48fb0' : '#000' }]} textColor='#fff' mode='contained' buttonColor={'#0147AB'} onPress={() => {
@@ -12,7 +12,7 @@ const ButtonScreen = ({ children, isDisabled, valueEmail, valuePassword, valueCo
                     handleSubmit();
                 }
                 else if (children === 'Update') {
-                    handleSubmit(valueFirstName, valueLastName,valuePhoneNumber,valueCountry,valueCity);
+                    handleSubmit(valueFirstName, valueLastName,valuePhoneNumber,valueCountry,valueCity,valueImage);
                 }
                 else if (children === 'Sign In with password') {
                     handleNavigation();

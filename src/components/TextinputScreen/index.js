@@ -360,7 +360,7 @@ const TextinputScreen = (props) => {
                         </View>
                         {props?.loading ? <ActivityIndicator size="small" color="#0000ff" /> :
                             <>
-                                <ButtonScreen handleSubmit={props?.handleSubmit} children={'Update'} valueFirstName={props?.firstName} valueLastName={props?.lastName} valuePhoneNumber={props?.phoneNumber} valueCountry={props?.country} valueCity={props?.city} />
+                                <ButtonScreen handleSubmit={props?.handleSubmit} children={'Update'} valueFirstName={props?.firstName} valueLastName={props?.lastName} valuePhoneNumber={props?.phoneNumber} valueCountry={props?.country} valueCity={props?.city} valueImage={props?.image} />
                             </>
                         }
                     </View>
