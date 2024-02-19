@@ -16,7 +16,7 @@ const Home = (props) => {
   const [collections, setCollections] = useState([]);
   const [allUserCollections, setAllUserCollections] = useState();
   const [deletingItemId, setDeletingItemId] = useState(null);
-  const [postID, setPostID]= useState('')
+  const [postID, setPostID] = useState('')
   const [firstTimeLogin, setFirstTimelogin] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false)
@@ -166,7 +166,7 @@ const Home = (props) => {
         duration: Snackbar.LENGTH_SHORT,
         backgroundColor: 'green',
       });
-     
+
       getAllData();
     } catch (error) {
       console.error('Error saving images:', error);
@@ -340,7 +340,7 @@ const Home = (props) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) =>
-              (<CardScreen isSaving={postID === item.id} loading={loading} deleteCollection={deleteCollection} isDeleting={isDeleting}  deletingItemId={deletingItemId} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts && bookmarkedPosts.some(bookmark => bookmark.id === item?.id) } isOwner={item.id.startsWith(user.postId)} />)
+              (<CardScreen isSaving={postID === item.id} loading={loading} deleteCollection={deleteCollection} isDeleting={isDeleting} deletingItemId={deletingItemId} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts && bookmarkedPosts.some(bookmark => bookmark.id === item?.id)} isOwner={item.id.startsWith(user.postId)} />)
             }
             keyExtractor={item => item?.id}
           />

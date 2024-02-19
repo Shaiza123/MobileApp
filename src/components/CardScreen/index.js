@@ -1,25 +1,16 @@
 import { View, Text, ActivityIndicator } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 import styles from '../CardScreen/style';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Card } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
-import { useFocusEffect } from '@react-navigation/native';
-
 
 const CardScreen = (props) => {
-    const [isBookmarked, setIsBookmarked] = useState(props?.isBookmarked);
-    useFocusEffect(
-        useCallback(() => {
-            setIsBookmarked(props?.isBookmarked);
-            return () => { };
-
-        }, [props?.isBookmarked]));
     return (
-        <Card style={styles.card} mode='contained' onPress={() => props?.navigation.navigate('CardDetail', { item: props?.item, isOwner: props?.isOwner, isBookmarked: isBookmarked, deleteCollection: props?.deleteCollection, bookmarkArticle: props?.bookmarkArticle })} >
-            {(props?.loading && props.isSaving) || (props?.isDeleting && props?.deleteItemId === props?.item?.id) ? <ActivityIndicator color="black" size="large" /> :
+        <Card style={styles.card} mode='contained' onPress={() => props?.navigation.push('CardDetail', { item: props?.item, isOwner: props?.isOwner, isBookmarked: props?.isBookmarked, deleteCollection: props?.deleteCollection, bookmarkArticle: props?.bookmarkArticle, isDeleting: props?.isDeleting, deletingItemId: props?.deletingItemId })} >
+            {(props?.loading && props.isSaving) || (props?.isDeleting && props?.deletingItemId === props?.item?.id) ? <ActivityIndicator color="black" size="large" /> :
                 <>
                     <View style={styles.image}>
                         <Card.Cover source={{ uri: props?.item?.image }} style={styles.cardImage} />
