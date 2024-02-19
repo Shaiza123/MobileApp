@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import SettingScreen from '../screens/SettingScreen/index';
 import Home from '../screens/Home/index';
 import PostScreen from '../screens/PostScreen/index';
@@ -14,16 +15,20 @@ import ForgotPassword from '../screens/ForgotPassword/index';
 import EmailVerify from '../screens/EmailVerify/index';
 import CardDetail from '../screens/CardDetail/index'
 import BookMark from '../screens/BookMark/index';
+import Profile from '../screens/Profile/index';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import OnBoardingScreen from '../screens/OnBoardingScreen/index';
 import AuthMain from '../screens/AuthMain/index';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useNavigation } from '@react-navigation/native';
+import DrawerScreen from '../screens/DrawerScreen/index';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const RootNavigator = () => {
     const user = useSelector((state) => state.user)
+    const navigation = useNavigation();
     const loading = useSelector((state) => state.loading);
 
     useEffect(() => {
@@ -37,13 +42,13 @@ const RootNavigator = () => {
             <View style={{ height: hp(7.5), width: hp(7.5), borderRadius: hp(4), backgroundColor: '#fff' }}>{children}</View>
         </TouchableOpacity>
     )
-    
+
     const AppTab = () => (
         <Tab.Navigator
             screenOptions={{
                 tabBarInactiveTintColor: '#fff',
                 tabBarActiveTintColor: '#fff',
-                headerShown: false,
+                // headerShown: false,
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     backgroundColor: '#0147AB',
@@ -61,10 +66,17 @@ const RootNavigator = () => {
                     tabBarIcon: ({ color }) => (
                         <Icon name="home" color={color} size={26} />
                     ),
+                    headerLeft: () => {
+                        return (
+                            <TouchableOpacity onPress={() => navigation?.openDrawer()}>
+                                <Ionicons name="menu" size={25} color="#000" />
+                            </TouchableOpacity>
+                        );
+                    }
                 }}
             />
             <Tab.Screen
-                name="PostScreen"
+                name="Post"
                 component={PostScreen}
                 options={{
                     tabBarIcon: ({ }) => (
@@ -75,19 +87,33 @@ const RootNavigator = () => {
                     ),
                     tabBarStyle: {
                         display: 'none'
+                    },
+                    headerLeft: () => {
+                        return (
+                            <TouchableOpacity onPress={() => navigation?.navigate('Home')}>
+                                <Icon name="arrow-back" size={25} color="#000" />
+                            </TouchableOpacity>
+                        );
                     }
                 }}
             />
             <Tab.Screen
-                name="SettingScreen"
-                component={SettingScreen}
+                name="Profile"
+                component={Profile}
                 options={{
-                    tabBarLabel: 'Settings',
+                    tabBarLabel: 'Profile',
                     tabBarIcon: ({ color }) => (
-                        <Icon name="settings" color={color} size={26} />
+                        <Ionicons name="person" color={color} size={26} />
                     ),
                     tabBarStyle: {
                         display: 'none'
+                    },
+                    headerLeft: () => {
+                        return (
+                            <TouchableOpacity onPress={() => navigation?.navigate('Home')}>
+                                <Icon name="arrow-back" size={25} color="#000" />
+                            </TouchableOpacity>
+                        );
                     }
                 }}
             />
@@ -95,10 +121,13 @@ const RootNavigator = () => {
     );
 
     const AppStack = () => (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name={'HomeScreens'} component={AppTab} />
-            <Stack.Screen name={'BookMark'} component={BookMark} options={{ headerShown: false }} />
+        <Stack.Navigator
+        // screenOptions={{ headerShown: false }}
+        >
+            <Stack.Screen name={'HomeScreens'} component={AppTab} options={{ headerShown: false }} />
+            <Stack.Screen name={'BookMark'} component={BookMark} />
             <Stack.Screen name={'CardDetail'} component={CardDetail} options={{ headerShown: false }} />
+            <Stack.Screen name={'Drawer'} component={DrawerScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
     );
 
@@ -111,6 +140,7 @@ const RootNavigator = () => {
             <Stack.Screen name={'EmailVerify'} component={EmailVerify} />
         </Stack.Navigator>
     );
+
 
     // if (loading) {
     //     return (

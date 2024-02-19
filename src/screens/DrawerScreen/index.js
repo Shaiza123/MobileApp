@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { DrawerActions} from '@react-navigation/native'
 import BookMark from '../BookMark/index'
@@ -10,37 +10,13 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Drawer = createDrawerNavigator()
 
-const SettingScreen = ({ navigation }) => {
+const DrawerScreen = ({ navigation }) => {
   // useEffect(() => {
   //   const unsubscribe = navigation.addListener('focus', () => {
   //     navigation.dispatch(DrawerActions.openDrawer());
   //   });
   //   return unsubscribe;
   // }, [navigation]);
-
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  useEffect(() => {
-    const unsubscribeFocus = navigation.addListener('focus', () => {
-      navigation.dispatch(DrawerActions.openDrawer());
-      setIsDrawerOpen(true);
-    });
-
-    const unsubscribeDrawerState = navigation.addListener('drawerClose', () => {
-      // setIsDrawerOpen(false); 
-      navigation.goBack();
-
-    });
-
-    if (!isDrawerOpen) {
-    }
-
-    return () => {
-      unsubscribeFocus();
-      unsubscribeDrawerState();
-    };
-  }, [navigation]);
-
 
   return (
     <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />}
@@ -73,4 +49,4 @@ const SettingScreen = ({ navigation }) => {
   )
 }
 
-export default SettingScreen
+export default DrawerScreen
