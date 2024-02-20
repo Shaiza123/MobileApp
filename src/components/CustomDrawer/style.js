@@ -18,7 +18,6 @@ export default styles = StyleSheet.create({
     userEmail:{
         color:'#fff',
         fontSize: RFPercentage(2),
-        fontWeight:'bold'
     },
     drawerList:{
         flex:1,

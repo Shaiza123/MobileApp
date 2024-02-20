@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useEffect } from 'react'
-import { Text, View, Image, Platform, ActivityIndicator } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { Text, View, Image, Platform, ActivityIndicator,Alert } from 'react-native'
 import styles from '../CardDetail/style'
 import { ImageHeaderScrollView, TriggeringView } from 'react-native-image-header-scroll-view';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -10,6 +10,7 @@ import Snackbar from 'react-native-snackbar';
 import Entypo from 'react-native-vector-icons/Entypo';
 import firestore from "@react-native-firebase/firestore";
 import { useSelector } from 'react-redux';
+import storage from '@react-native-firebase/storage';
 
 const MIN_HEIGHT = Platform.OS === 'ios' ? 90 : 55;
 const MAX_HEIGHT = 300;
@@ -22,13 +23,8 @@ const CardDetail = (props) => {
   const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
   const [bookmark, setBookmark] = useState(false);
   const user = useSelector((state) => state.user)
-
-  useEffect(() => {
-    setBookmark(bookmarkedPosts && bookmarkedPosts.some(bookmark => bookmark.id === itemData?.id))
-  }, [bookmark]);
-
-  console.log(bookmark)
-  
+  const postId = user?.postId;
+ 
   useEffect(() => {
     getBookmarkedPosts();
   }, [bookmarkedPosts]);
@@ -41,6 +37,12 @@ const CardDetail = (props) => {
       setBookmarkedPosts(allData.bookmarks || []);
     }
   }
+ 
+  useEffect(() => {
+    const isBookmark= bookmarkedPosts && bookmarkedPosts.some(bookmark => bookmark.id === itemData?.id)
+    setBookmark(isBookmark)
+  }, [bookmarkedPosts, itemData?.id]);
+
   //delete collection from firestore
   const deleteCollection = async (collectionId, collectionPostTitle) => {
     try {
@@ -95,7 +97,6 @@ const CardDetail = (props) => {
           }
           await batch.commit();
           deleteFilesInDirectory(collectionPostTitle, () => {
-            getAllData();
           });
 
         } else {
@@ -203,16 +204,9 @@ const CardDetail = (props) => {
               <View style={styles.postContainer}>
                 <Text style={styles.heading}>OverView</Text>
                 <View style={{ flexDirection: 'row' }}>
-                  {props?.route?.params?.path === 'bookmark' ?
-                    <FontAwesome
-                      name={"bookmark"}
-                      size={hp(3)} color="#0147AB" /> :
-                    <>
                       <FontAwesome
                         name={bookmark ? "bookmark" : "bookmark-o"}
                         size={hp(3)} color="#0147AB" />
-                    </>
-                  }
                   <Menu>
                     <MenuTrigger>
                       <View style={styles.menuTriggerStyle}>
@@ -228,37 +222,22 @@ const CardDetail = (props) => {
                               <Text style={[styles.menuItemText, { color: '#FF0000' }]}>Delete</Text>
                             </View>
                           </MenuOption>
-                          {props?.route?.params?.path === 'bookmark' ?
-                            <MenuOption onSelect={() => bookmarkArticle(itemData?.id, itemData?.PostTitle, itemData?.PostDescription, itemData?.image)}>
-                              <View style={styles.menuItem}>
-                                <FontAwesome name={"bookmark"} size={20} color="#0147AB" />
-                                <Text style={[styles.menuItemText, { color: '#0147AB' }]}>UnBookmark</Text>
-                              </View>
-                            </MenuOption> :
                             <MenuOption onSelect={() => bookmarkArticle(itemData?.id, itemData?.PostTitle, itemData?.PostDescription, itemData?.image)}>
                               <View style={styles.menuItem}>
                                 <FontAwesome name={bookmark ? "bookmark" : "bookmark-o"} size={20} color="#0147AB" />
                                 <Text style={[styles.menuItemText, { color: '#0147AB' }]}>{bookmark ? 'UnBookmark' : 'Bookmark'}</Text>
                               </View>
                             </MenuOption>
-                          }
                         </>
                       )}
                       {!props?.route?.params?.isOwner && (
                         <>
-                          {props?.route?.params?.path === 'bookmark' ? <MenuOption onSelect={() => bookmarkArticle(itemData?.id, itemData?.PostTitle, itemData?.PostDescription, itemData?.image)}>
-                            <View style={styles.menuItem}>
-                              <FontAwesome name={ "bookmark" } size={20} color="#0147AB" />
-                              <Text style={[styles.menuItemText, { color: '#0147AB' }]}>UnBookmark</Text>
-                            </View>
-                          </MenuOption> :
                              <MenuOption onSelect={() => bookmarkArticle(itemData?.id, itemData?.PostTitle, itemData?.PostDescription, itemData?.image)}>
                              <View style={styles.menuItem}>
                                <FontAwesome name={bookmark ? "bookmark" : "bookmark-o"} size={20} color="#0147AB" />
                                <Text style={[styles.menuItemText, { color: '#0147AB' }]}>{bookmark ? 'UnBookmark' : 'Bookmark'}</Text>
                              </View>
                            </MenuOption>
-                          }
                         </>
                       )}
                     </MenuOptions>

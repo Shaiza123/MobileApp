@@ -1,4 +1,4 @@
-import { View, FlatList, Text } from 'react-native'
+import { View, FlatList, Text,Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import styles from '../BookMark/style';
 import CardScreen from '../../components/CardScreen/index'
@@ -6,6 +6,7 @@ import firestore from "@react-native-firebase/firestore";
 import { useSelector } from 'react-redux';
 import { LogBox } from 'react-native';
 import Snackbar from 'react-native-snackbar';
+import storage from '@react-native-firebase/storage';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -16,6 +17,7 @@ const BookMark = (props) => {
   const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deletingItemId, setDeletingItemId] = useState(null);
+  const postId = user?.postId;
   useEffect(() => {
     getBookmarkedPosts();
   }, [bookmarkedPosts]);
@@ -83,7 +85,6 @@ const BookMark = (props) => {
           }
           await batch.commit();
           deleteFilesInDirectory(collectionPostTitle, () => {
-            getAllData();
           });
 
         } else {

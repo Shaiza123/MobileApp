@@ -1,5 +1,5 @@
 import { ImageBackground, Text, View, Image, TouchableOpacity, ActivityIndicator, Alert } from 'react-native'
-import React,{ useState } from 'react'
+import React,{ useState ,useEffect } from 'react'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 import styles from '../CustomDrawer/style'
 import { useSelector } from 'react-redux';
@@ -13,6 +13,27 @@ const CustomDrawer = (props) => {
     const [delAccountloading, setDelAccountLoading] = useState(false)
     const [logoutloading, setLogoutLoading] = useState(false)
     const user = useSelector((state) => state.user)
+    const [userImageUrl, setUserImageUrl] = useState(require('../../assets/userProfile.jpg'));
+    const [userName, setUserName] = useState('')
+
+    useEffect(() => {
+        getUserImageUrl();
+    }, [user.id]);
+
+    const getUserImageUrl = async () => {
+        try {
+            const userDoc = await firestore().collection('users').doc(user.id).get();
+            const userData = userDoc.data();
+            if (userData && userData.url) {
+                setUserImageUrl(userData.url);
+            }
+            setUserName(userData.firstName + ' ' + userData.lastName)
+        } catch (error) {
+            console.error('Error fetching user image URL:', error);
+        }
+    };
+
+
     const deleteAccount = async () => {
         try {
             setDelAccountLoading(true)
@@ -69,8 +90,9 @@ const CustomDrawer = (props) => {
         <View style={styles.container}>
             <DrawerContentScrollView {...props} contentContainerStyle={{ backgroundColor: '#000188' }}>
                 <ImageBackground source={require('../../assets/drawerBackground.jpg')} style={styles.drawerBackground}>
-                    <Image source={require('../../assets/userProfile.jpg')} style={styles.drawerImage} />
-                    <Text style={styles.userEmail}>{user?.email}</Text>
+                    <Image source={typeof userImageUrl === 'string' ? { uri: userImageUrl } : userImageUrl} style={styles.drawerImage} />
+                    <Text style={[styles.userEmail,{fontWeight:'bold'}]}>{userName}</Text>
+                    <Text style={[styles.userEmail,{fontWeight:'300'}]}>{user?.email}</Text>
                 </ImageBackground>
                 <View style={styles.drawerList}>
                     <DrawerItemList {...props} />
