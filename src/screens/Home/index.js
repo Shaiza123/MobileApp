@@ -33,7 +33,7 @@ const Home = (props) => {
   useLayoutEffect(() => {
     props.navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => props?.navigation?.navigate('bookmark', { bookmarkArticle: bookmarkArticle, deleteCollection: deleteCollection, deletingItemId: deletingItemId, isDeleting: isDeleting })}>
+        <TouchableOpacity onPress={() => props?.navigation?.navigate('bookmark')}>
           <FontAwesome name="bookmark-o" size={hp(3)} color="#0147AB" style={{ marginRight: hp(2) }}/>
         </TouchableOpacity>
       ),

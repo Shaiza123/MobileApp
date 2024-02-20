@@ -9,7 +9,7 @@ import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-m
 
 const CardScreen = (props) => {
     return (
-        <Card style={styles.card} mode='contained' onPress={() => props?.navigation.navigate('CardDetail', { item: props?.item, isOwner: props?.isOwner, isBookmarked: props?.isBookmarked, deleteCollection: props?.deleteCollection, bookmarkArticle: props?.bookmarkArticle, isDeleting: props?.isDeleting, deletingItemId: props?.deletingItemId, path:props?.path })} >
+        <Card style={styles.card} mode='contained' onPress={() => props?.navigation.navigate('CardDetail', { item: props?.item, isOwner: props?.isOwner, path:props?.path })} >
             {(props?.loading && props.isSaving) || (props?.isDeleting && props?.deletingItemId === props?.item?.id) ? <ActivityIndicator color="black" size="large" /> :
                 <>
                     <View style={styles.image}>
