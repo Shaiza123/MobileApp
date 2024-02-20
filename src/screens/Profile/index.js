@@ -4,7 +4,6 @@ import styles from '../Profile/style'
 import { useSelector } from 'react-redux'
 import firestore from '@react-native-firebase/firestore';
 import TextInputScreen from '../../components/TextinputScreen/index'
-import Header from '../../components/Header/index'
 import ImagePicker from 'react-native-image-crop-picker';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -81,7 +80,6 @@ const Profile = (props) => {
     >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="always" >
         <View style={styles.mainContainer}>
-          <Header children={'Edit Profile'} navigation={props?.navigation} />
           <View style={{ alignItems: 'center', justifyContent: 'center',flexDirection:'row' }}>
             <ImageBackground source={typeof image === 'string' ? { uri: image } : image} style={styles.drawerImage} imageStyle={{ borderRadius: hp(20) }} />
             <Menu>

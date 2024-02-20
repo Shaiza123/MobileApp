@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, Alert, FlatList, Image, } from 'react-native';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
+import { Text, View, Alert, FlatList, Image, TouchableOpacity} from 'react-native';
 import firestore from "@react-native-firebase/firestore";
 import Snackbar from 'react-native-snackbar';
 import { useSelector } from 'react-redux';
 import styles from '../Home/style'
-import Header from '../../components/Header/index';
 import LoaderModal from '../../components/LoaderModal/index';
 import Swiper from 'react-native-swiper'
 import CardScreen from '../../components/CardScreen/index'
 import storage from '@react-native-firebase/storage';
 import LottieView from 'lottie-react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Home = (props) => {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -28,6 +29,17 @@ const Home = (props) => {
   useEffect(() => {
     getBookmarkedPosts();
   }, [bookmarkedPosts]);
+
+  useLayoutEffect(() => {
+    props.navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={() => props?.navigation?.navigate('bookmark', { bookmarkArticle: bookmarkArticle, deleteCollection: deleteCollection, deletingItemId: deletingItemId, isDeleting: isDeleting })}>
+          <FontAwesome name="bookmark-o" size={hp(3)} color="#0147AB" style={{ marginRight: hp(2) }}/>
+        </TouchableOpacity>
+      ),
+    });
+  }, [props.navigation])
+
 
   const getBookmarkedPosts = async () => {
     const bookmarks = firestore().collection('users');
@@ -204,16 +216,29 @@ const Home = (props) => {
       setIsDeleting(true);
       setDeletingItemId(collectionId);
 
-      const docRef = firestore().collection('Posts').doc(postId);
-      const doc = await docRef.get();
+      const batch = firestore().batch();
 
-      if (doc.exists) {
-        const productsArray = doc.data().posts || [];
-        const indexToDelete = productsArray.findIndex(item => item.id === collectionId);
+      const docRef = firestore().collection('Posts').doc(postId);
+      const bookmarksRef = firestore().collection('users').doc(user?.id);
+      const [postsDoc, bookmarksDoc] = await Promise.all([docRef.get(), bookmarksRef.get()]);
+
+      if (postsDoc.exists) {
+        const postsArray = postsDoc.data().posts || [];
+        const indexToDelete = postsArray.findIndex(item => item.id === collectionId);
 
         if (indexToDelete >= 0) {
-          productsArray.splice(indexToDelete, 1);
-          await docRef.update({ posts: productsArray });
+          postsArray.splice(indexToDelete, 1);
+          batch.update(docRef, { posts: postsArray });
+
+          if (bookmarksDoc.exists) {
+            const bookmarksArray = bookmarksDoc.data().bookmarks || [];
+            const bookmarkIndex = bookmarksArray.findIndex(bookmark => bookmark.id === collectionId);
+            if (bookmarkIndex !== -1) {
+              bookmarksArray.splice(bookmarkIndex, 1);
+              batch.update(bookmarksRef, { bookmarks: bookmarksArray });
+            }
+          }
+          await batch.commit();
           deleteFilesInDirectory(collectionPostTitle, () => {
             getAllData();
           });
@@ -304,7 +329,6 @@ const Home = (props) => {
       <LoaderModal modalVisible={modalVisible} closeModal={closeModal} />
     </> :
     <View style={styles.container}>
-      <Header children={'Home'} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} />
       <View style={styles.sliderContainer}>
         <Swiper autoplay horizontal={false} activeDotColor='#0147AB'>
           <View style={styles.slide}>
@@ -326,7 +350,7 @@ const Home = (props) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) =>
-              (<CardScreen deleteCollection={deleteCollection} deletingItemId={deletingItemId} isDeleting={isDeleting} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts && bookmarkedPosts.some(bookmark => bookmark.id === item?.id)} isOwner={item.id.startsWith(user.postId)} />)
+              (<CardScreen deleteCollection={deleteCollection} deletingItemId={deletingItemId} isDeleting={isDeleting} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts && bookmarkedPosts.some(bookmark => bookmark.id === item?.id)} isOwner={item.id.startsWith(user.postId)} path={'home'} />)
             }
             keyExtractor={item => item?.id}
           />
@@ -340,7 +364,7 @@ const Home = (props) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) =>
-              (<CardScreen isSaving={postID === item.id} loading={loading} deleteCollection={deleteCollection} isDeleting={isDeleting} deletingItemId={deletingItemId} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts && bookmarkedPosts.some(bookmark => bookmark.id === item?.id)} isOwner={item.id.startsWith(user.postId)} />)
+              (<CardScreen isSaving={postID === item.id} loading={loading} deleteCollection={deleteCollection} isDeleting={isDeleting} deletingItemId={deletingItemId} item={item} navigation={props?.navigation} bookmarkArticle={bookmarkArticle} isBookmarked={bookmarkedPosts && bookmarkedPosts.some(bookmark => bookmark.id === item?.id)} isOwner={item.id.startsWith(user.postId)} path={'home'} />)
             }
             keyExtractor={item => item?.id}
           />

@@ -8,7 +8,7 @@ export default styles = StyleSheet.create({
       backgroundColor: "#ffffff",
       gap: 2,
       paddingHorizontal: '3%',
-      paddingBottom:'40%',
+      paddingBottom:'20%',
     },
     image:{
       width:wp(35),

@@ -102,7 +102,7 @@ const AuthMain = ({ navigation }) => {
             </View>
             <ButtonScreen handleNavigation={handleNavigation} children={'Sign In with password'} />
             <View style={{ justifyContent: "center", alignItems: "center", flexDirection: "row", paddingTop: "5%" }}>
-                <Text>Don't have an account? </Text>
+                <Text style={{color:'#000'}}>Don't have an account? </Text>
                 <TouchableOpacity onPress={() => { navigation.navigate('SignUp') }}>
                     <Text style={{ color: "#0147AB", textDecorationLine: 'underline' }}>SignUp</Text>
                 </TouchableOpacity>

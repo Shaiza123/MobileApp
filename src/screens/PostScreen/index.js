@@ -6,8 +6,7 @@ import TextInputScreen from '../../components/TextinputScreen/index'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { FloatingAction } from "react-native-floating-action";
 import ImagePicker from 'react-native-image-crop-picker';
-import Header from "../../components/Header/index";
-
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 export default function PostScreen(props) {
   const [postTitle, setPostTitle] = useState('');
@@ -45,7 +44,7 @@ export default function PostScreen(props) {
   ];
 
   const handleSubmit = () => {
-    props.navigation.navigate('HomeScreens', {
+    props.navigation.navigate('home', {
       screen: 'Home',
       params: {
           postTitle: postTitle,
@@ -67,7 +66,7 @@ export default function PostScreen(props) {
     props.navigation.setOptions({
       headerLeft: () => (
         <TouchableOpacity onPress={() => handleBackPress()}>
-          <Icon name="arrow-back" size={25} color="#FFF" />
+          <Icon name="arrow-back" size={25} color="#000" style={{ marginLeft: hp(2) }}/>
         </TouchableOpacity>
       ),
     });
@@ -99,7 +98,7 @@ export default function PostScreen(props) {
               setPostTitle('');
               setPostDescription('')
               setImage(null)
-              props.navigation.navigate('Home', {
+              props.navigation.navigate('home', {
                 screen: 'Home',
                 params: { postTitle: props?.route?.params?.postTitle, postDescription: props?.route?.params?.postDescription, image: props?.route?.params?.image },
               });
@@ -110,8 +109,8 @@ export default function PostScreen(props) {
       return true;
     }
 
-    if (postTitle.length === 0 || postDescription.length === 0 || image) {
-      props.navigation.navigate('Home', {
+    if (postTitle.length === 0 || postDescription.length === 0 || image === null) {
+      props.navigation.navigate('home', {
         screen: 'Home',
         params: { post: props?.route?.params?.postTitle, postDescription: props?.route?.params?.postDescription, image: props?.route?.params?.image },
       });
@@ -129,7 +128,6 @@ export default function PostScreen(props) {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="always" showsVerticalScrollIndicator={false} >
         <View style={styles.container}>
           <View style={{flexDirection:'row'}}>
-          <Header children={'Post'} navigation={props?.navigation}/>
           </View>
           <TextInputScreen postTitle={postTitle} postDescription={postDescription} postTitleRef={postTitleRef} postDescriptionRef={postDescriptionRef} path={'Post'} setPostTitle={setPostTitle} setPostDescription={setPostDescription} handleSubmit={handleSubmit} image={image}
             cancelImage={cancelImage}

@@ -9,7 +9,7 @@ import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-m
 
 const CardScreen = (props) => {
     return (
-        <Card style={styles.card} mode='contained' onPress={() => props?.navigation.push('CardDetail', { item: props?.item, isOwner: props?.isOwner, isBookmarked: props?.isBookmarked, deleteCollection: props?.deleteCollection, bookmarkArticle: props?.bookmarkArticle, isDeleting: props?.isDeleting, deletingItemId: props?.deletingItemId })} >
+        <Card style={styles.card} mode='contained' onPress={() => props?.navigation.navigate('CardDetail', { item: props?.item, isOwner: props?.isOwner, isBookmarked: props?.isBookmarked, deleteCollection: props?.deleteCollection, bookmarkArticle: props?.bookmarkArticle, isDeleting: props?.isDeleting, deletingItemId: props?.deletingItemId, path:props?.path })} >
             {(props?.loading && props.isSaving) || (props?.isDeleting && props?.deletingItemId === props?.item?.id) ? <ActivityIndicator color="black" size="large" /> :
                 <>
                     <View style={styles.image}>
@@ -45,7 +45,7 @@ const CardScreen = (props) => {
                                             <MenuOption onSelect={() => props?.bookmarkArticle(props?.item?.id, props?.item?.PostTitle, props?.item?.PostDescription, props?.item?.image)}>
                                                 <View style={styles.menuItem}>
                                                     <FontAwesome name={"bookmark"} size={20} color="#0147AB" />
-                                                    <Text style={[styles.menuItemText, { color: '#0147AB' }]}>{'UnBookmark'}</Text>
+                                                    <Text style={[styles.menuItemText, { color: '#0147AB' }]}>UnBookmark</Text>
                                                 </View>
                                             </MenuOption>
                                             :
@@ -64,7 +64,7 @@ const CardScreen = (props) => {
                                             <MenuOption onSelect={() => props?.bookmarkArticle(props?.item?.id, props?.item?.PostTitle, props?.item?.PostDescription, props?.item?.image)}>
                                                 <View style={styles.menuItem}>
                                                     <FontAwesome name={"bookmark"} size={20} color="#0147AB" />
-                                                    <Text style={[styles.menuItemText, { color: '#0147AB' }]}>{'UnBookmark'}</Text>
+                                                    <Text style={[styles.menuItemText, { color: '#0147AB' }]}>UnBookmark</Text>
                                                 </View>
                                             </MenuOption>
                                             :

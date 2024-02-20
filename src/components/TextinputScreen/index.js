@@ -240,6 +240,7 @@ const TextinputScreen = (props) => {
                                 onChangeText={props?.setPostDescription}
                                 value={props?.postDescription}
                                 ref={props?.postDescriptionRef}
+                                onSubmitEditing={() => Keyboard.dismiss()}
                                 keyboardType="default"
                                 numberOfLines={8}
                                 multiline={true}

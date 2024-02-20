@@ -67,7 +67,7 @@ const ForgotPassword = ({ navigation }) => {
                     </View>
                     <TextinputScreen loginValidationsSchema={loginValidationsSchema} errorMessage={errorMessage} loading={loading} path={'ForgotPassword'} setErrorMessage={setErrorMessage} forgotPassword={forgotPassword} />
                     <View style={styles.textDirection}>
-                        <Text style={styles.textStyling}>
+                        <Text style={{color:'#000'}}>
                             Remember Password?
                         </Text>
 

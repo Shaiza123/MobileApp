@@ -67,7 +67,7 @@ const CustomDrawer = (props) => {
     }
     return (
         <View style={styles.container}>
-            <DrawerContentScrollView {...props} contentContainerStyle={{ backgroundColor: '#0147AB' }}>
+            <DrawerContentScrollView {...props} contentContainerStyle={{ backgroundColor: '#000188' }}>
                 <ImageBackground source={require('../../assets/drawerBackground.jpg')} style={styles.drawerBackground}>
                     <Image source={require('../../assets/userProfile.jpg')} style={styles.drawerImage} />
                     <Text style={styles.userEmail}>{user?.email}</Text>

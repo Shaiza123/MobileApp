@@ -21,9 +21,6 @@ const userSlice = createSlice({
     signout: (state) => {
       state.user = {id: '', email: '',postId: '',}
     },
-    setLoading: (state,action) => {
-      state.loading = action.payload.loading
-    },  
   },
 })
 
