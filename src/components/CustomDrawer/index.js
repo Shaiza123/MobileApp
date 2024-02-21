@@ -18,7 +18,7 @@ const CustomDrawer = (props) => {
 
     useEffect(() => {
         getUserImageUrl();
-    }, [user.id]);
+    }, [user.id,userName,userImageUrl]);
 
     const getUserImageUrl = async () => {
         try {
